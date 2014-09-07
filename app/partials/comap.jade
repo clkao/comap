@@ -1,0 +1,27 @@
+section(layout='horizontal', layout-fill='layout-fill')
+    material-sidenav.material-sidenav-left.material-whiteframe-z2(component-id='left')
+      material-toolbar.material-theme-indigo
+        h1.material-toolbar-tools Sidenav Left
+      material-content.material-content-padding(ng-controller='LeftCtrl')
+        material-button.material-button-colored(ng-click='close()', hide-md='hide-md')
+          | Close Sidenav Left
+        material-list
+          material-list-item
+            .material-tile-left
+              span 28%
+            .material-tile-content
+              h2 臺北市
+          material-list-item
+            .material-tile-left
+              span 18%
+            .material-tile-content
+              h2 新北市
+    material-content.material-content-padding(flex='flex')
+      div(layout='vertical', layout-fill='layout-fill', layout-align='center center')
+        p On smaller devices, material-sidenav will be hidden by default.
+        p On larger, it will be shown by default.
+        div
+          material-button.material-button-colored(ng-click='toggleLeft()', hide-md='hide-md')
+            | Toggle left
+        leaflet(defaults="defaults",center="center",height="480px",width="640px")
+

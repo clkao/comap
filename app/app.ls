@@ -1,6 +1,6 @@
 # Declare app level module which depends on filters, and services
 
-angular.module "App" <[app.templates ngMaterial ui.router]>
+angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directive]>
 
 .config <[$stateProvider $urlRouterProvider $locationProvider]> ++ ($stateProvider, $urlRouterProvider, $locationProvider) ->
   $stateProvider
@@ -8,6 +8,10 @@ angular.module "App" <[app.templates ngMaterial ui.router]>
       url: '/about'
       templateUrl: 'app/partials/about.html'
       controller: "About"
+    .state 'comap' do
+      url: '/comap'
+      templateUrl: 'app/partials/comap.html'
+      controller: "CoMapCtrl"
     # Catch all
   $urlRouterProvider
     .otherwise('/about')
