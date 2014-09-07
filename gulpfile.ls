@@ -110,6 +110,7 @@ gulp.task 'index' ->
     .pipe gulp-jade do
       pretty: pretty
       locals:
+        base: gutil.env.base
         googleAnalytics: google-analytics
     .pipe gulp.dest '_public'
     .pipe gulp-if dev, livereload!

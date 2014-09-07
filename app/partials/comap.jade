@@ -1,7 +1,5 @@
 section(layout='horizontal', layout-fill='layout-fill')
     material-sidenav.material-sidenav-left.material-whiteframe-z2(component-id='left')
-      material-toolbar.material-theme-indigo
-        h1.material-toolbar-tools Sidenav Left
       material-content.material-content-padding(ng-controller='LeftCtrl')
         material-button.material-button-colored(ng-click='close()', hide-md='hide-md')
           | Close Sidenav Left
@@ -18,10 +16,40 @@ section(layout='horizontal', layout-fill='layout-fill')
               h2 新北市
     material-content.material-content-padding(flex='flex')
       div(layout='vertical', layout-fill='layout-fill', layout-align='center center')
-        p On smaller devices, material-sidenav will be hidden by default.
-        p On larger, it will be shown by default.
-        div
-          material-button.material-button-colored(ng-click='toggleLeft()', hide-md='hide-md')
-            | Toggle left
+        div: material-button.material-button-colored(ng-click='toggleLeft()', hide-md='hide-md') Toggle left
+        h2 {{ data.id }}
+        div(layout='horizontal', layout-fill='layout-fill',flex, layout-align='center')
+          material-input-group
+            h3 {{ data.name }}
+            label(for="name") Name
+            material-input(id="test",type="text",ng-model="osmdata.name")
+            material-content(ng-if="nameReults && nameResults.length == 0")
+              | No results
+            material-list(ng-if="nameResults")
+              material-list-item(ng-repeat="entry in nameResults")
+                .material-tile-left
+                  img.face(ng-src="{{entry.icon}}")
+                  material-button.material-button-fab(ng-click="look(entry)")
+                    i.icon.zoom.in
+                  material-button.material-button-fab(target="_blank",ng-href="{{entry.edit_url}}")
+                    i.icon.edit
+                .material-tile-content
+                  h2 {{entry.display_name}}
+                  h3 {{entry.type}} / {{entry.osm_type}}/{{entry.osm_id}} / {{entry.place_id}}
+          material-input-group
+            h3 {{ data.address }}
+            label(for="address") Address
+            material-input(id="test",type="text",ng-model="osmdata.address")
+            material-content(ng-if="addressResults && addressResults.length == 0")
+              | No results
+            material-list(ng-if="addressResults")
+              material-list-item(ng-repeat="entry in addressResults")
+                .material-tile-left
+                  material-button.material-button-fab(ng-click="look(entry)")
+                    i.icon.zoom.in
+                .material-tile-content
+                  h2 {{entry.display_name}}
+                  h3 {{entry.type}} / {{entry.osm_type}}/{{entry.osm_id}} / {{entry.place_id}}
+        material-button.material-button-colored(ng-click='find()') Find
         leaflet(defaults="defaults",center="center",height="480px",width="640px")
 
