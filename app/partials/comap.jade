@@ -5,15 +5,13 @@ section(layout='horizontal', layout-fill='layout-fill')
           | Close Sidenav Left
         material-list
           material-list-item
-            .material-tile-left
-              span 28%
             .material-tile-content
-              h2 臺北市
+              .ui.top.attached.progress.successful(ng-style="{width: '28%'}"): .bar
+              h2(title="28%") 臺北市 (2358)
           material-list-item
-            .material-tile-left
-              span 18%
             .material-tile-content
-              h2 新北市
+              .ui.top.attached.progress.successful(ng-style="{width: '18%'}"): .bar
+              h2(title="18%") 新北市 (2947)
     material-content.material-content-padding(layout-fill)
       div(layout='vertical', layout-fill='layout-fill', layout-align='center center')
         div: material-button.material-button-colored(ng-click='toggleLeft()', hide-md='hide-md') Toggle left
