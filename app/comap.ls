@@ -8,6 +8,9 @@ angular.module "comap" []
         address: "北宜路二段８０號"
         village: "美潭里"
         remark: "1-7,9"
+        osmdata: do
+          name: "青潭國小"
+          address: "80 北宜路二段"
       * id: "TPQ-2150"
         name: "格頭市民活動中心"
         address: "北宜路五段３號"
@@ -45,7 +48,7 @@ angular.module "comap" []
         color: '#800000'
         opacity: 1
   $scope.data = CoMapData.get 'TPQ' .0
-  $scope.osmdata = {} <<< $scope.data
+  $scope.osmdata = if $scope.data.osmdata => that else {} <<< $scope.data
   map <- leafletData.getMap!then
 
 
