@@ -1,11 +1,7 @@
 material-toolbar.material-theme-light(scroll-shrink)
-  .material-toolbar-tools
+  .material-toolbar-tools(layout="horizontal")
     h2
-      a.left.floated.item.header.brand(href='/') CoMap
-      a.right.floated.item.branding(href='http://livescript.net', target='_blank')
-        img(src='http://livescript.net/images/icon.png')
-    h3
-      a.item(ng-href='/', ng-class="{active:activeTab == ''}") Home
-    h3.right.floated.menu
+      a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
+    h3(layout-align="end")
       a.item.about(ng-href="/about", ng-class="{active:activeTab == 'about'}") 關於
-    a.ui.top.right.attached.label.build-id(href="http://github.com/clkao/angular-livescript-seed") {{ config_build }}
+    a.ui.top.right.attached.label.build-id(href="http://github.com/clkao/comap") {{ config_build }}
