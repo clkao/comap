@@ -45,4 +45,4 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
     $rootScope.activeTab = 'about'
 
 angular.module "config" []
-.constant 'API_ENDPOINT' 'http://localhost:3000'
+.constant 'API_ENDPOINT' 'http://api-beta.ly.g0v.tw:3908'
