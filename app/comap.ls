@@ -16,9 +16,9 @@ angular.module "comap" <[config]>
         c: 1
   set: (key, data) ->
     $http.put "#API_ENDPOINT/collections/booth/#key", data
-  geocode: (query, {city, country = "TW"}) ->
+  geocode: (query, {city, country = "TW", county}) ->
     $http.get 'https://nominatim.openstreetmap.org/search' do
-      params: {city, country} <<< do
+      params: {county, city, country} <<< do
         format: 'json'
         addressdetails: 1
         street: query
