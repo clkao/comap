@@ -72,6 +72,16 @@ angular.module "comap" <[config]>
     $scope.dirty = true
     $scope.selectingName = false
 
+  $scope.selectName = ->
+    unless $scope.osmdata.name-results
+      CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
+        $scope.osmdata.name-results = res
+    $scope.selectingName = true
+  $scope.selectAddress = ->
+    unless $scope.osmdata.address-results
+      CoMapData.geocode $scope.osmdata.address, {city} .success (res) ->
+        $scope.osmdata.address-results = res
+    $scope.selectingAddress = true
   $scope.setStreet = (entry) ->
     $scope.data <<< do
       osm_street_id: "#{entry.osm_type}/#{entry.osm_id}"

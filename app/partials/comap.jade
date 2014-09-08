@@ -30,7 +30,7 @@ section(layout='horizontal', layout-fill='layout-fill')
                 section(layout="horizontal")
                   material-input(id="place_name",type="text",ng-model="osmdata.place_name")
                   i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_id")
-                  i.circular.red.inverted.question.icon(ng-hide="data.osm_id",ng-click='selectingName=true')
+                  i.circular.red.inverted.question.icon(ng-hide="data.osm_id",ng-click='selectName()')
               material-whiteframe.material-whiteframe-z2.fixed(layout="vertical",layout-align="left center",ng-show="selectingName")
                 material-content.material-content-padding
                   div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
@@ -56,7 +56,7 @@ section(layout='horizontal', layout-fill='layout-fill')
                 section(layout="horizontal")
                   material-input(id="test",type="text",ng-model="osmdata.address")
                   i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_street_id")
-                  i.circular.red.inverted.question.icon(ng-hide="data.osm_street_id",ng-click='selectingAddress=true')
+                  i.circular.red.inverted.question.icon(ng-hide="data.osm_street_id",ng-click='selectAddress()')
               material-input-group
                 label(for="house_number") Number
                 section(layout="horizontal")
