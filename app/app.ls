@@ -18,7 +18,7 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
       url: '/{seq}'
     # Catch all
   $urlRouterProvider
-    .otherwise('/about')
+    .otherwise('/comap/TPQ')
 
   # Without serve side support html5 must be disabled.
   $locationProvider.html5Mode true
