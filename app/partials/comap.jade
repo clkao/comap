@@ -76,5 +76,6 @@ section(layout='horizontal', layout-fill='layout-fill')
                   div(layout='horizontal',layout-align='end')
                     material-button(ng-click="selectAddress(1)") Query Again
                     material-button(ng-click="selectingAddress = false") close
-          leaflet(defaults="defaults",center="center",height="320px",width="480px",layout-fill)
-
+          div(flex)
+            h4 By submitting, you agree the data will be released under CC0 or ODbl when stored on OSM.
+            leaflet(defaults="defaults",center="center",height="320px",width="480px",layout-fill)
