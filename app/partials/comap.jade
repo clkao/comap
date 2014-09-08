@@ -43,9 +43,9 @@ section(layout='horizontal', layout-fill='layout-fill')
                         i.circular.icon.edit(ng-click="edit(entry)")
                         i.circular.icon.checkmark(ng-click="setPlace(entry)",ng-class="{teal: data.osm_id == entry.osm_type + '/' + entry.osm_id}")
                         h2 {{entry.display_name}}
-                div(layout='horizontal',layout-align='end')
-                  material-button(ng-click="find()") Query Again
-                  material-button(ng-click="selectingName = false") close
+                  div(layout='horizontal',layout-align='end')
+                    material-button(ng-click="selectName(1)") Query Again
+                    material-button(ng-click="selectingName = false") close
               material-input-group
                 label(for="place_remark") Remark
                 material-input(id="place_remark",type="text",ng-model="osmdata.place_remark",size="6")
@@ -73,8 +73,8 @@ section(layout='horizontal', layout-fill='layout-fill')
                         i.circular.icon.edit(ng-click="edit(entry)")
                         i.circular.icon.checkmark(ng-click="setStreet(entry)",ng-class="{teal: data.osm_street_id == entry.osm_type + '/' + entry.osm_id}")
                         h2 {{entry.display_name}}
-                div(layout='horizontal',layout-align='end')
-                  material-button(ng-click="find()") Query Again
-                  material-button(ng-click="selectingAddress = false") close
+                  div(layout='horizontal',layout-align='end')
+                    material-button(ng-click="selectAddress(1)") Query Again
+                    material-button(ng-click="selectingAddress = false") close
           leaflet(defaults="defaults",center="center",height="320px",width="480px",layout-fill)
 

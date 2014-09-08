@@ -51,14 +51,6 @@ angular.module "comap" <[config]>
       zoom: 8
   map <- leafletData.getMap!then
 
-  $scope.find = (what, force) ->
-    CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
-      $scope.osmdata.name-results = res
-    CoMapData.geocode $scope.osmdata.address, {city} .success (res) ->
-      $scope.osmdata.address-results = res
-    if $scope.data.street
-      CoMapData.geocode $scope.osmdata.street, {city} .success (res) ->
-        $scope.osmdata.street-results = res
   $scope.edit = (entry) ->
     edit_url = "https://www.openstreetmap.org/edit?#{entry.osm_type}=#{entry.osm_id}"
     window.open edit_url, '_blank'
@@ -72,14 +64,14 @@ angular.module "comap" <[config]>
     $scope.dirty = true
     $scope.selectingName = false
 
-  $scope.selectName = ->
-    unless $scope.osmdata.name-results
+  $scope.selectName = (force) ->
+    if force || !$scope.osmdata.name-results
       CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
         $scope.osmdata.name-results = res
     $scope.selectingName = true
-  $scope.selectAddress = ->
-    unless $scope.osmdata.address-results
-      CoMapData.geocode $scope.osmdata.address, {city} .success (res) ->
+  $scope.selectAddress = (force) ->
+    if force || !$scope.osmdata.address-results
+      CoMapData.geocode $scope.osmdata.address, {city, county: $scope.data.town} .success (res) ->
         $scope.osmdata.address-results = res
     $scope.selectingAddress = true
   $scope.setStreet = (entry) ->
