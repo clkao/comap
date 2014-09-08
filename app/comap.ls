@@ -13,7 +13,7 @@ angular.module "comap" <[config]>
         street: query
 
 .controller CoMapCtrl: <[$scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
-  city = "新北市"
+  $scope.county-name = city = "新北市"
 
   $scope.$watch '$state.current.name' ->
     console.log \woot $state
@@ -35,7 +35,7 @@ angular.module "comap" <[config]>
       zoom: 8
   map <- leafletData.getMap!then
 
-  $scope.find = ->
+  $scope.find = (what, force) ->
     CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
       $scope.osmdata.name-results = res
     CoMapData.geocode $scope.osmdata.address, {city} .success (res) ->
@@ -53,10 +53,20 @@ angular.module "comap" <[config]>
       lng: entry.lon
       osm_name: $('tag[k="name"]', $scope.xml).attr("v")
     <- $scope.show-osm $scope.data.osm_id
+    $scope.dirty = true
+    $scope.selectingName = false
+
+  $scope.setStreet = (entry) ->
+    $scope.data <<< do
+      osm_street_id: "#{entry.osm_type}/#{entry.osm_id}"
+    <- $scope.show-osm $scope.data.osm_street_id
+    $scope.dirty = true
+    $scope.selectingAddress = false
 
   $scope.save = ->
     $scope.data.osm_data = $scope.osmdata
-    <- CoMapData.set $scope.id, $scope.data{osm_data,place_id,osm_id,osm_name,lat,lng}
+    <- CoMapData.set $scope.id, $scope.data{osm_data,place_id,osm_id,osm_name,lat,lng,osm_street_id} .success
+    $scope.dirty = false
 
   #L.mapbox.accessToken = 'pk.eyJ1IjoiY2xrYW8iLCJhIjoiOW5MUkJEOCJ9.xOaCu48ToZJa7h2sxcH_SA';
   #mapboxTiles = L.tileLayer 'https://{s}.tiles.mapbox.com/v3/clkao.j69d46c1/{z}/{x}/{y}.png', do
