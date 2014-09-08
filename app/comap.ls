@@ -2,8 +2,19 @@ angular.module "comap" <[config]>
 .factory CoMapData: <[$http API_ENDPOINT]> ++ ($http, API_ENDPOINT) ->
   get: (key) ->
     $http.get "#API_ENDPOINT/collections/booth/#key"
+  random: (county, count) ->
+    $http.get "#API_ENDPOINT/collections/booth" do
+      params:
+        q: JSON.stringify {lat: null}
+        f: JSON.stringify {+id}
+        l: 1
+        sk: Math.round Math.random! * count
+  count: (county) ->
+    $http.get "#API_ENDPOINT/collections/booth" do
+      params:
+        q: JSON.stringify {lat: null}
+        c: 1
   set: (key, data) ->
-    console.log \toset
     $http.put "#API_ENDPOINT/collections/booth/#key", data
   geocode: (query, {city, country = "TW"}) ->
     $http.get 'https://nominatim.openstreetmap.org/search' do
@@ -15,11 +26,11 @@ angular.module "comap" <[config]>
 .controller CoMapCtrl: <[$scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
   $scope.county-name = city = "新北市"
 
-  $scope.$watch '$state.current.name' ->
-    console.log \woot $state
+  $scope.$watch '$state.params.county' -> if it
+    res <- CoMapData.count it .success
+    $scope.count = res.count
   $scope.$watch '$state.params.seq' -> if it
     $scope.id = "#{$state.params.county}-#{$state.params.seq}"
-    console.log \woot $scope.id
     $scope.data <- CoMapData.get $scope.id .success
     $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
     if $scope.data.osm_id
@@ -67,6 +78,13 @@ angular.module "comap" <[config]>
     $scope.data.osm_data = $scope.osmdata
     <- CoMapData.set $scope.id, $scope.data{osm_data,place_id,osm_id,osm_name,lat,lng,osm_street_id} .success
     $scope.dirty = false
+    $scope.random!
+
+  $scope.random = ->
+    data <- CoMapData.random $scope.county, $scope.count .success
+    $scope.count = data.paging.count
+    [_, seq] = data.entries.0.id.split '-'
+    $state.transition-to 'comap.county.booth' {county: $state.params.county, seq}
 
   #L.mapbox.accessToken = 'pk.eyJ1IjoiY2xrYW8iLCJhIjoiOW5MUkJEOCJ9.xOaCu48ToZJa7h2sxcH_SA';
   #mapboxTiles = L.tileLayer 'https://{s}.tiles.mapbox.com/v3/clkao.j69d46c1/{z}/{x}/{y}.png', do
