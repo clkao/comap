@@ -12,6 +12,10 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
       url: '/comap'
       templateUrl: 'app/partials/comap.html'
       controller: "CoMapCtrl"
+    .state 'comap.county' do
+      url: '/{county}'
+    .state 'comap.county.booth' do
+      url: '/{seq}'
     # Catch all
   $urlRouterProvider
     .otherwise('/about')
@@ -39,3 +43,6 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
 
 .controller About: <[$rootScope $http]> ++ ($rootScope, $http) ->
     $rootScope.activeTab = 'about'
+
+angular.module "config" []
+.constant 'API_ENDPOINT' 'http://localhost:3000'
