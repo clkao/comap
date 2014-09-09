@@ -24,9 +24,12 @@ angular.module "comap" <[config]>
         street: query
 
 .controller CoMapCtrl: <[$scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
-  $scope.county-name = city = "新北市"
-
+  var city
   $scope.$watch '$state.params.county' -> if it
+    $scope.county-name = city := {
+      TPQ: "新北市"
+      TPE: "臺北市"
+    }[it]
     res <- CoMapData.count it, JSON.stringify {lat: null} .success
     $scope.count = res.count
     res <- CoMapData.count it .success
