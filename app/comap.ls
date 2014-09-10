@@ -29,6 +29,7 @@ angular.module "comap" <[config]>
     $scope.county-name = city := {
       TPQ: "新北市"
       TPE: "臺北市"
+      KHH: "高雄市"
     }[it]
     res <- CoMapData.count it, JSON.stringify {lat: null} .success
     $scope.count = res.count
