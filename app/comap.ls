@@ -1,3 +1,27 @@
+tw3166 = do
+  CHA: "彰化縣"
+  CYI: "嘉義市"
+  CYQ: "嘉義縣"
+  HSQ: "新竹縣"
+  HSZ: "新竹市"
+  HUA: "花蓮縣"
+  ILA: "宜蘭縣"
+  JME: "金門縣"
+  KEE: "基隆市"
+  KHH: "高雄市"
+  LJF: "連江縣"
+  MIA: "苗栗縣"
+  NAN: "南投縣"
+  PEN: "澎湖縣"
+  PIF: "屏東縣"
+  TAO: "桃園市"
+  TNN: "臺南市"
+  TPE: "臺北市"
+  TPQ: "新北市"
+  TTT: "臺東縣"
+  TXG: "臺中市"
+  YUN: "雲林縣"
+
 angular.module "comap" <[config]>
 .factory CoMapData: <[$http API_ENDPOINT]> ++ ($http, API_ENDPOINT) ->
   get: (key) ->
@@ -14,6 +38,9 @@ angular.module "comap" <[config]>
       params:
         q: q
         c: 1
+  completion: ->
+    $http.get "#API_ENDPOINT/collections/completion"
+
   set: (key, data) ->
     $http.put "#API_ENDPOINT/collections/booth/#key", data
   geocode: (query, {city, country = "TW", county}) ->
@@ -25,12 +52,11 @@ angular.module "comap" <[config]>
 
 .controller CoMapCtrl: <[$scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
   var city
+  CoMapData.completion JSON.stringify {lat: null} .success ({entries}?) ->
+    $scope.completion = entries
+
   $scope.$watch '$state.params.county' -> if it
-    $scope.county-name = city := {
-      TPQ: "新北市"
-      TPE: "臺北市"
-      KHH: "高雄市"
-    }[it]
+    $scope.county-name = city := tw3166[it]
     res <- CoMapData.count it, JSON.stringify {lat: null} .success
     $scope.count = res.count
     res <- CoMapData.count it .success
@@ -126,3 +152,4 @@ angular.module "comap" <[config]>
 
 .controller RightCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
   $scope.close = -> $materialSidenav('right').close()
+.filter "countyName" -> (county) -> tw3166[county]

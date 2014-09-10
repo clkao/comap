@@ -4,14 +4,10 @@ section(layout='horizontal', layout-fill='layout-fill')
         material-button.material-button-colored(ng-click='close()', hide-md='hide-md')
           | Close Sidenav Left
         material-list
-          material-item
-            .material-tile-content
-              .ui.top.attached.progress.successful(ng-style="{width: '28%'}"): .bar
-              h2(title="28%") 臺北市 (2358)
-          material-item
-            .material-tile-content
-              .ui.top.attached.progress.successful(ng-style="{width: '18%'}"): .bar
-              h2(title="18%") 新北市 (2947)
+          material-item(ng-repeat="c in completion")
+              .ui.top.attached.progress.successful(ng-style="{width: (100*c.completed / c.total)+'%'}"): .bar
+              material-button.material-tile-content(ui-sref="{county: c.county}",title="{{100 * c.completed / c.total | number:2}}%") {{c.county | countyName}} ({{c.total}})
+
     material-content(layout-fill)
       div(layout='vertical', layout-fill='layout-fill', layout-align='center center')
         material-toolbar.material-theme-green(scroll-shrink)
