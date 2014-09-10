@@ -50,26 +50,21 @@ angular.module "comap" <[config]>
         addressdetails: 1
         street: query
 
-.controller CoMapCtrl: <[$scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
+.controller CoMapCtrl: <[$q $scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($q, $scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
   var city
   CoMapData.completion JSON.stringify {lat: null} .success ({entries}?) ->
     $scope.completion = entries
 
+  count = $q.defer!
   $scope.$watch '$state.params.county' -> if it
     $scope.county-name = city := tw3166[it]
     res <- CoMapData.count it, JSON.stringify {lat: null} .success
     $scope.count = res.count
     res <- CoMapData.count it .success
     $scope.total = res.count
+    count.resolve!
     if $state.current.name is 'comap.county'
       $scope.random!
-
-  $scope.$watch '$state.params.seq' -> if it
-    $scope.id = "#{$state.params.county}-#{$state.params.seq}"
-    $scope.data <- CoMapData.get $scope.id .success
-    $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
-    if $scope.data.osm_id
-      $scope.show-osm that
 
   $scope.toggleLeft = ->
     $materialSidenav('left').toggle()
@@ -146,6 +141,16 @@ angular.module "comap" <[config]>
 
   $scope.look = (entry) ->
     $scope.show-osm entry<[osm_type osm_id]>.join '/'
+
+  $scope.$watch '$state.params.seq' -> unless it is undefined
+    unless it
+      return count.promise.then -> $scope.random!
+    $scope.id = "#{$state.params.county}-#{$state.params.seq}"
+    $scope.data <- CoMapData.get $scope.id .success
+    $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
+    if $scope.data.osm_id
+      $scope.show-osm that
+
 
 .controller LeftCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
   $scope.close = -> $materialSidenav('left').close()
