@@ -1,7 +1,7 @@
 material-toolbar.material-theme-light(scroll-shrink)
   .material-toolbar-tools(layout="horizontal")
-    h2
+    h2(flex=66)
       a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
-    h3(layout-align="end")
+    h3(layout-align="end",flex)
       a.item.about(ng-href="/about", ng-class="{active:activeTab == 'about'}") 關於
     a.ui.top.right.attached.label.build-id(href="http://github.com/clkao/comap") {{ config_build }}
