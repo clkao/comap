@@ -29,14 +29,14 @@ angular.module "comap" <[config]>
   random: (county, count) ->
     $http.get "#API_ENDPOINT/collections/booth" do
       params:
-        q: JSON.stringify {lat: null}
+        q: JSON.stringify {county, lat: null}
         f: JSON.stringify {+id}
         l: 1
         sk: Math.round Math.random! * count
-  count: (county, q) ->
+  count: (county, q = {}) ->
     $http.get "#API_ENDPOINT/collections/booth" do
       params:
-        q: q
+        q: JSON.stringify {county} <<< q
         c: 1
   completion: ->
     $http.get "#API_ENDPOINT/collections/completion"
@@ -57,8 +57,9 @@ angular.module "comap" <[config]>
 
   count = $q.defer!
   $scope.$watch '$state.params.county' -> if it
+    $scope.county = it
     $scope.county-name = city := tw3166[it]
-    res <- CoMapData.count it, JSON.stringify {lat: null} .success
+    res <- CoMapData.count it, {lat: null} .success
     $scope.count = res.count
     res <- CoMapData.count it .success
     $scope.total = res.count
