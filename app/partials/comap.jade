@@ -22,7 +22,7 @@ section(layout='horizontal', layout-fill='layout-fill')
             material-button.material-button-raised.material-button-colored.material-theme-red(ng-click='save()',ng-show="dirty") Save
             material-button.material-button-raised.material-button-colored.material-theme-orange(ng-click='random()',layout-align='end') Random
         div(layout='horizontal', layout-fill='layout-fill',flex, layout-align='center')
-          material-content.material-content-padding(layout='vertical', flex)
+          material-content.material-content-padding.comap-input(layout='vertical', flex)
             material-card(layout-fill,flex)
               h3 {{ data.place_name }}
               material-input-group
@@ -33,6 +33,9 @@ section(layout='horizontal', layout-fill='layout-fill')
                   i.circular.red.inverted.question.icon(ng-hide="data.osm_id",ng-click='selectName()')
               material-whiteframe.material-whiteframe-z2.fixed(layout="vertical",layout-align="left center",ng-show="selectingName")
                 material-content.material-content-padding
+                  div(layout='horizontal',layout-align='end')
+                    material-button(ng-click="selectName(1)") Query Again
+                    material-button(ng-click="selectingName = false") close
                   div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
                   material-list(ng-if="osmdata.nameResults")
                     material-item(ng-repeat="entry in osmdata.nameResults")
@@ -43,9 +46,6 @@ section(layout='horizontal', layout-fill='layout-fill')
                         i.circular.icon.edit(ng-click="edit(entry)")
                         i.circular.icon.checkmark(ng-click="setPlace(entry)",ng-class="{teal: data.osm_id == entry.osm_type + '/' + entry.osm_id}")
                         h2 {{entry.display_name}}
-                  div(layout='horizontal',layout-align='end')
-                    material-button(ng-click="selectName(1)") Query Again
-                    material-button(ng-click="selectingName = false") close
               material-input-group
                 label(for="place_remark") Remark
                 material-input(id="place_remark",type="text",ng-model="osmdata.place_remark",size="6")
@@ -78,4 +78,4 @@ section(layout='horizontal', layout-fill='layout-fill')
                     material-button(ng-click="selectingAddress = false") close
           div(flex)
             h4 By submitting, you agree the data will be released under CC0 or ODbl when stored on OSM.
-            leaflet(defaults="defaults",center="center",height="320px",width="480px",layout-fill)
+            leaflet(defaults="defaults",center="center",height="320px",width="100%",layout-fill)
