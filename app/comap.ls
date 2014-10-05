@@ -44,6 +44,9 @@ angular.module "comap" <[config]>
   set: (key, data) ->
     $http.put "#API_ENDPOINT/collections/booth/#key", data
   geocode: (query, {city, country = "TW", county}) ->
+    # crazy osm special case before the admin region actually changes
+    if city is '桃園市'
+      city = '桃園縣 (Táoyuán)'
     $http.get 'https://nominatim.openstreetmap.org/search' do
       params: {county, city, country} <<< do
         format: 'json'
