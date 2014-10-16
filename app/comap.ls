@@ -159,6 +159,4 @@ angular.module "comap" <[config]>
 .controller LeftCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
   $scope.close = -> $materialSidenav('left').close()
 
-.controller RightCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
-  $scope.close = -> $materialSidenav('right').close()
 .filter "countyName" -> (county) -> tw3166[county]
