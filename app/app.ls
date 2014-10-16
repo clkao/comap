@@ -30,13 +30,13 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
   $rootScope.$on '$stateChangeSuccess' (e, {name}) ->
     window?ga? 'send' 'pageview' page: $location.$$path, title: name
 
-.controller AppCtrl: <[$scope $location $rootScope $sce]> ++ (s, $location, $rootScope, $sce) ->
-  s <<< {$location}
-  s.$watch '$location.path()' (activeNavId or '/') ->
-    s <<< {activeNavId}
+.controller AppCtrl: <[$scope $location $rootScope $sce]> ++ ($scope, $location, $rootScope, $sce) ->
+  $scope <<< {$location}
+  $scope.$watch '$location.path()' (activeNavId or '/') ->
+    $scope <<< {activeNavId}
 
-  s.getClass = (id) ->
-    if s.activeNavId.substring 0 id.length is id
+  $scope.getClass = (id) ->
+    if $scope.activeNavId.substring 0 id.length is id
       'active'
     else
       ''
