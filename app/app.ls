@@ -40,9 +40,5 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
       'active'
     else
       ''
-
-.controller About: <[$rootScope $http]> ++ ($rootScope, $http) ->
-    $rootScope.activeTab = 'about'
-
 angular.module "config" []
 .constant 'API_ENDPOINT' 'http://api-beta.ly.g0v.tw:3908'
