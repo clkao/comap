@@ -30,7 +30,7 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
   $rootScope.$on '$stateChangeSuccess' (e, {name}) ->
     window?ga? 'send' 'pageview' page: $location.$$path, title: name
 
-.controller AppCtrl: <[$scope $location $rootScope $sce]> ++ ($scope, $location, $rootScope, $sce) ->
+.controller AppCtrl: <[$scope $location $rootScope $sce CoMapData]> ++ ($scope, $location, $rootScope, $sce, CoMapData) ->
   $scope <<< {$location}
   $scope.$watch '$location.path()' (activeNavId or '/') ->
     $scope <<< {activeNavId}
@@ -40,7 +40,9 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
       'active'
     else
       ''
-  $scope.cities = ["台北市", "新北市"]
+
+  CoMapData.completion JSON.stringify { lat: null } .success ({entries}?) ->
+    $scope.cities = entries
 
 angular.module "config" []
 .constant 'API_ENDPOINT' 'http://api-beta.ly.g0v.tw:3908'
