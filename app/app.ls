@@ -40,5 +40,7 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
       'active'
     else
       ''
+  $scope.cities = ["台北市", "新北市"]
+
 angular.module "config" []
 .constant 'API_ENDPOINT' 'http://api-beta.ly.g0v.tw:3908'

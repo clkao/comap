@@ -34,7 +34,7 @@ html(ng-app='App')
         h3.material-toolbar-tools
           a.item.about(ui-sref="about") 關於
       material-content(flex)
-        div(style="height: 600px;") &nbsp;
+        material-button.material-tile-content(layout-fill, ng-repeat="city in cities") {{ city }}
     div(layout="vertical", ui-view, layout-fill, tabindex="-1", role="main")
 
   - if (typeof(googleAnalytics) !== 'undefined')
