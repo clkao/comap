@@ -43,6 +43,3 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
 
   CoMapData.completion JSON.stringify { lat: null } .success ({entries}?) ->
     $scope.cities = entries
-
-angular.module "config" []
-.constant 'API_ENDPOINT' 'http://api-beta.ly.g0v.tw:3908'
