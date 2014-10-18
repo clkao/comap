@@ -28,13 +28,14 @@ html(ng-app='App')
   body(ng-controller='AppCtrl', ng-cloak, layout="horizontal", layout-fill)
     a.ui.top.right.attached.label.build-id(href="http://github.com/clkao/comap", style="z-index: 1000;") {{ config_build }}
     material-sidenav.material-sidenav-left.material-whiteframe-z3.closed(layout="vertical")
-      material-toolbar.material-theme-light.material-medium-tall
+      material-toolbar.material-theme-light
         h2.material-toolbar-tools
           a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
-        h3.material-toolbar-tools
-          a.item.about(ui-sref="about") 關於
       material-content(flex)
         material-button.material-tile-content(layout-fill, ng-repeat="city in cities") {{ city.county | countyName }}
+      material-toolbar.material-theme-light
+        h2.material-toolbar-tools
+          a.item.about(ui-sref="about") 關於
     div(layout="vertical", ui-view, layout-fill, tabindex="-1", role="main")
 
   - if (typeof(googleAnalytics) !== 'undefined')
