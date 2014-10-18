@@ -72,9 +72,9 @@ angular.module "comap" <[config]>
 
   $scope <<< do
     center: do
-      lat: 24.5
-      lng: 121.5
-      zoom: 8
+      lat: 25.04
+      lng: 121.54
+      zoom: 13
   map <- leafletData.getMap!then
 
   $scope.edit = (entry) ->
