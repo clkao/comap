@@ -53,7 +53,7 @@ angular.module "comap" <[config]>
         addressdetails: 1
         street: query
 
-.controller CoMapCtrl: <[$q $scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($q, $scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
+.controller CoMapCtrl: <[$q $scope $sce $state leafletData CoMapData]> ++ ($q, $scope, $sce, $state, leafletData, CoMapData) ->
   var city
   CoMapData.completion JSON.stringify {lat: null} .success ({entries}?) ->
     $scope.completion = entries
@@ -69,9 +69,6 @@ angular.module "comap" <[config]>
     count.resolve!
     if $state.current.name is 'comap.county'
       $scope.random!
-
-  $scope.toggleLeft = ->
-    $materialSidenav('left').toggle()
 
   $scope <<< do
     center: do
@@ -154,9 +151,5 @@ angular.module "comap" <[config]>
     $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
     if $scope.data.osm_id
       $scope.show-osm that
-
-
-.controller LeftCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
-  $scope.close = -> $materialSidenav('left').close()
 
 .filter "countyName" -> (county) -> tw3166[county]
