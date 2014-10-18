@@ -32,7 +32,10 @@ html(ng-app='App')
         h2.material-toolbar-tools
           a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
       material-content(flex)
-        material-button.material-tile-content(layout-fill, ng-repeat="city in cities") {{ city.county | countyName }}
+        material-item(ng-repeat="city in cities")
+          div(style="width: 100%")
+            .ui.top.attached.progress.successful(ng-style="{width: (100*city.completed / city.total)+'%'}"): .bar
+            material-button.material-tile-content(layout-fill, ui-sref="{county: city.county, seq: null}", title="{{100 * city.completed / city.total | number:2}}%") {{ city.county | countyName }} ({{city.total}})
       material-toolbar.material-theme-light
         h2.material-toolbar-tools
           a.item.about(ui-sref="about") 關於

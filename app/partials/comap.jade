@@ -1,14 +1,4 @@
-section(layout='horizontal', layout-fill='layout-fill')
-    material-sidenav.material-sidenav-left.material-whiteframe-z2(component-id='left')
-      material-content.material-content-padding(ng-controller='LeftCtrl')
-        material-button.material-button-colored(ng-click='close()', hide-md='hide-md')
-          | Close
-        material-list
-          material-item(ng-repeat="c in completion")
-            div(style="width: 100%")
-              .ui.top.attached.progress.successful(ng-style="{width: (100*c.completed / c.total)+'%'}"): .bar
-              material-button.material-tile-content(layout-fill,ui-sref="{county: c.county, seq: null}",title="{{100 * c.completed / c.total | number:2}}%") {{c.county | countyName}} ({{c.total}})
-
+section(layout='horizontal', layout-fill)
     material-content(layout-fill)
       div(layout='vertical', layout-fill='layout-fill', layout-align='center center')
         material-toolbar.material-theme-green(scroll-shrink)
