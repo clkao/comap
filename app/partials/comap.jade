@@ -1,6 +1,6 @@
 material-toolbar.material-theme-green(scroll-shrink)
   .material-toolbar-tools
-    h2 {{ countyName }} ({{ (total - count) / total * 100 | number:2}}%) / {{data.town}}{{ data.village }} / {{ id }} 投開票所
+    h2 {{ countyName }} / {{data.town}}{{ data.village }} / {{ id }} 投開票所
     material-button.material-button-raised.material-button-colored.material-theme-red(ng-click='save()',ng-show="dirty") Save
     material-button.material-button-raised.material-button-colored.material-theme-orange(ng-click='random()',layout-align='end') Random
 
