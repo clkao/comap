@@ -13,14 +13,12 @@ div(layout-fill, flex)
       section(layout="horizontal")
         material-input(type="text", ng-model="osmdata.place_name")
         material-button(ng-click="selectName(1)") Query by Name
-        material-button(ng-show="selectingName", ng-click="selectingName = false") close
         i.circular.teal.checkmark.icon(ng-show="data.osm_id")
 
       label Address
       section(layout="horizontal")
         material-input(type="text", ng-model="osmdata.address")
         material-button(ng-click="selectAddress(1)") Query by Address
-        material-button(ng-show="selectingAddress", ng-click="selectingAddress = false") close
         i.circular.teal.checkmark.icon(ng-show="data.osm_street_id")
 
       label Remark
@@ -34,7 +32,7 @@ div(layout-fill, flex)
       p {{ osmdata.addressResults[0].lon }}
       p {{ osmdata.addressResults[0].display_name }}
 
-    material-content.material-content-padding(layout="vertical", layout-align="left center", ng-show="selectingName")
+    material-content.material-content-padding
       div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
       material-list(ng-if="osmdata.nameResults")
         material-item(ng-repeat="entry in osmdata.nameResults")
@@ -45,7 +43,7 @@ div(layout-fill, flex)
             {{entry.display_name}}
           material-divider(ng-if="!$last")
 
-    material-content.material-content-padding(ng-show="selectingAddress")
+    material-content.material-content-padding
         div(ng-if="osmdata.addressResults && osmdata.addressResults.length == 0")
           | No results
         material-list(ng-if="osmdata.addressResults")

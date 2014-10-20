@@ -80,6 +80,7 @@ angular.module "comap" <[config]>
   $scope.edit = (entry) ->
     edit_url = "https://www.openstreetmap.org/edit?#{entry.osm_type}=#{entry.osm_id}"
     window.open edit_url, '_blank'
+
   $scope.setPlace = (entry) ->
     $scope.data <<< entry{place_id} <<< do
       osm_id: "#{entry.osm_type}/#{entry.osm_id}"
@@ -88,24 +89,22 @@ angular.module "comap" <[config]>
       osm_name: $('tag[k="name"]', $scope.xml).attr("v")
     <- $scope.show-osm $scope.data.osm_id
     $scope.dirty = true
-    $scope.selectingName = false
 
   $scope.selectName = (force) ->
     if force || !$scope.osmdata.name-results
       CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
         $scope.osmdata.name-results = res
-    $scope.selectingName = true
+
   $scope.selectAddress = (force) ->
     if force || !$scope.osmdata.address-results
       CoMapData.geocode $scope.osmdata.address, {city, county: $scope.data.town} .success (res) ->
         $scope.osmdata.address-results = res
-    $scope.selectingAddress = true
+
   $scope.setStreet = (entry) ->
     $scope.data <<< do
       osm_street_id: "#{entry.osm_type}/#{entry.osm_id}"
     <- $scope.show-osm $scope.data.osm_street_id
     $scope.dirty = true
-    $scope.selectingAddress = false
 
   $scope.save = ->
     $scope.data.osm_data = $scope.osmdata
