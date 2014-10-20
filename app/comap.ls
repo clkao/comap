@@ -115,7 +115,6 @@ angular.module "comap" <[config]>
 
   $scope.random = ->
     data <- CoMapData.random $scope.county, $scope.count .success
-    $scope.count = data.paging.count
     [_, seq] = data.entries.0.id.split '-'
     $state.transition-to 'comap.county.booth' {county: $state.params.county, seq}
 
