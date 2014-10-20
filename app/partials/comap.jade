@@ -1,57 +1,56 @@
-material-toolbar.material-theme-green(scroll-shrink)
-  .material-toolbar-tools
-    h2 {{ countyName }} / {{data.town}}{{ data.village }} / {{ id }} 投開票所
-    material-button.material-button-raised.material-button-colored.material-theme-red(ng-click='save()',ng-show="dirty") Save
-    material-button.material-button-raised.material-button-colored.material-theme-orange(ng-click='random()',layout-align='end') Random
+div(layout-fill, flex)
+  material-toolbar.material-theme-dark
+    .material-toolbar-tools {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
+      material-button.material-theme-light-blue(ng-click='random()',layout-align='end') Next
 
-div(layout='horizontal', layout-fill)
+  div(style="margin-left: 10px;")
+    h3 {{ data.place_name }}/{{ data.address }}/{{ id }}
+    material-button.material-theme-blue(ng-click='save()',ng-show="dirty") Save
 
-    material-content.material-content-padding(layout-fill, flex)
-      h3 {{ data.place_name }}
-      material-button(ng-click="selectName(1)") Query
-      material-button(ng-show="selectingName", ng-click="selectingName = false") close
+    material-button(ng-click="selectName(1)") Query by Name
+    material-button(ng-show="selectingName", ng-click="selectingName = false") close
 
-      material-input-group
-        label(for="place_name") Place Name
-        section(layout="horizontal")
-          material-input(id="place_name",type="text",ng-model="osmdata.place_name")
-          i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_id")
-        label(for="place_remark") Remark
-        material-input(id="place_remark",type="text",ng-model="osmdata.place_remark",size="6")
+    material-button(ng-click="selectAddress(1)") Query by Address
+    material-button(ng-show="selectingAddress", ng-click="selectingAddress = false") close
 
-      material-content.material-content-padding(layout="vertical", layout-align="left center", ng-show="selectingName")
-        div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
-        material-list(ng-if="osmdata.nameResults")
-          material-item(ng-repeat="entry in osmdata.nameResults")
-            material-item-content
-              i.circular.icon.zoom.in(ng-click="look(entry)")
-              i.circular.icon.edit(ng-click="edit(entry)")
-              i.circular.icon.checkmark(ng-click="setPlace(entry)",ng-class="{teal: data.osm_id == entry.osm_type + '/' + entry.osm_id}")
-              {{entry.display_name}}
-            material-divider(ng-if="!$last")
+    material-input-group
+      label(for="place_name") Place Name
+      section(layout="horizontal")
+        material-input(id="place_name",type="text",ng-model="osmdata.place_name")
+        i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_id")
 
-      h3 {{ data.address }}
-      material-button(ng-click="selectAddress(1)") Query
-      material-button(ng-show="selectingAddress", ng-click="selectingAddress = false") close
-
-      material-input-group
-        label(for="address") Address
+      label(for="address") Address
+      section(layout="horizontal")
         material-input(id="test",type="text",ng-model="osmdata.address")
         i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_street_id")
 
-        label(for="house_number") Number
-        material-input(id="test",type="text",ng-model="osmdata.house_number",size="6")
+      label(for="house_number") Number
+      material-input(id="test",type="text",ng-model="osmdata.house_number",size="6")
 
-      material-content.material-content-padding(ng-show="selectingAddress")
-          div(ng-if="osmdata.addressResults && osmdata.addressResults.length == 0")
-            | No results
-          material-list(ng-if="osmdata.addressResults")
-            material-item(ng-repeat="entry in osmdata.addressResults")
-              material-item-content
-                i.circular.icon.zoom.in(ng-click="look(entry)")
-                i.circular.icon.edit(ng-click="edit(entry)")
-                i.circular.icon.checkmark(ng-click="setStreet(entry)",ng-class="{teal: data.osm_street_id == entry.osm_type + '/' + entry.osm_id}")
-                div {{entry.display_name}}
-            material-divider(ng-if="!$last")
+      label(for="place_remark") Remark
+      material-input(id="place_remark",type="text",ng-model="osmdata.place_remark",size="6")
 
-    leaflet(defaults="defaults", center="center", width="800px", height="100%")
+    material-content.material-content-padding(layout="vertical", layout-align="left center", ng-show="selectingName")
+      div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
+      material-list(ng-if="osmdata.nameResults")
+        material-item(ng-repeat="entry in osmdata.nameResults")
+          material-item-content
+            i.circular.icon.zoom.in(ng-click="look(entry)")
+            i.circular.icon.edit(ng-click="edit(entry)")
+            i.circular.icon.checkmark(ng-click="setPlace(entry)",ng-class="{teal: data.osm_id == entry.osm_type + '/' + entry.osm_id}")
+            {{entry.display_name}}
+          material-divider(ng-if="!$last")
+
+    material-content.material-content-padding(ng-show="selectingAddress")
+        div(ng-if="osmdata.addressResults && osmdata.addressResults.length == 0")
+          | No results
+        material-list(ng-if="osmdata.addressResults")
+          material-item(ng-repeat="entry in osmdata.addressResults")
+            material-item-content
+              i.circular.icon.zoom.in(ng-click="look(entry)")
+              i.circular.icon.edit(ng-click="edit(entry)")
+              i.circular.icon.checkmark(ng-click="setStreet(entry)",ng-class="{teal: data.osm_street_id == entry.osm_type + '/' + entry.osm_id}")
+              div {{entry.display_name}}
+          material-divider(ng-if="!$last")
+
+leaflet(defaults="defaults", center="center", width="800px", height="100%")

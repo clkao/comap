@@ -39,7 +39,7 @@ html(ng-app='App')
       material-toolbar.material-theme-light
         h2.material-toolbar-tools
           a.item.about(ui-sref="about") 關於
-    div(layout="vertical", ui-view, layout-fill)
+    div(layout="horizontal", ui-view, layout-fill)
 
   - if (typeof(googleAnalytics) !== 'undefined')
     script(type="text/javascript").
