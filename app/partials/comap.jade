@@ -3,32 +3,36 @@ div(layout-fill, flex)
     .material-toolbar-tools {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
       material-button.material-theme-light-blue(ng-click='random()',layout-align='end') Next
 
-  div(style="margin-left: 10px;")
-    h3 {{ data.place_name }}/{{ data.address }}/{{ id }}
-    material-button.material-theme-blue(ng-click='save()',ng-show="dirty") Save
+  div(style="margin: 16px;")
+    h3 {{ data.id }}
 
-    material-button(ng-click="selectName(1)") Query by Name
-    material-button(ng-show="selectingName", ng-click="selectingName = false") close
-
-    material-button(ng-click="selectAddress(1)") Query by Address
-    material-button(ng-show="selectingAddress", ng-click="selectingAddress = false") close
+    p(ng-if="data.phone") phone {{data.phone}}
 
     material-input-group
-      label(for="place_name") Place Name
+      label Place Name
       section(layout="horizontal")
-        material-input(id="place_name",type="text",ng-model="osmdata.place_name")
-        i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_id")
+        material-input(type="text", ng-model="osmdata.place_name")
+        material-button(ng-click="selectName(1)") Query by Name
+        material-button(ng-show="selectingName", ng-click="selectingName = false") close
+        i.circular.teal.checkmark.icon(ng-show="data.osm_id")
 
-      label(for="address") Address
+      label Address
       section(layout="horizontal")
-        material-input(id="test",type="text",ng-model="osmdata.address")
-        i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_street_id")
+        material-input(type="text", ng-model="osmdata.address")
+        material-button(ng-click="selectAddress(1)") Query by Address
+        material-button(ng-show="selectingAddress", ng-click="selectingAddress = false") close
+        i.circular.teal.checkmark.icon(ng-show="data.osm_street_id")
 
-      label(for="house_number") Number
-      material-input(id="test",type="text",ng-model="osmdata.house_number",size="6")
+      label Remark
+      material-input(type="text", ng-model="osmdata.place_remark")
 
-      label(for="place_remark") Remark
-      material-input(id="place_remark",type="text",ng-model="osmdata.place_remark",size="6")
+    div(style="margin-top: 30px; padding-top: 10px; border-top: 1px solid #ccc;")
+      material-button.material-theme-blue(ng-click='save()') Save
+
+    div(ng-if="osmdata")
+      p {{ osmdata.addressResults[0].lat }}
+      p {{ osmdata.addressResults[0].lon }}
+      p {{ osmdata.addressResults[0].display_name }}
 
     material-content.material-content-padding(layout="vertical", layout-align="left center", ng-show="selectingName")
       div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
