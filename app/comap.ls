@@ -81,30 +81,18 @@ angular.module "comap" <[config]>
     edit_url = "https://www.openstreetmap.org/edit?#{entry.osm_type}=#{entry.osm_id}"
     window.open edit_url, '_blank'
 
-  $scope.setPlace = (entry) ->
-    $scope.data <<< entry{place_id} <<< do
-      osm_id: "#{entry.osm_type}/#{entry.osm_id}"
+  $scope.match = (entry) ->
+    $scope.data <<< do
+      osm_id: entry.osm_id
       lat: entry.lat
       lng: entry.lon
-      osm_name: $('tag[k="name"]', $scope.xml).attr("v")
-    <- $scope.show-osm $scope.data.osm_id
-    $scope.dirty = true
 
-  $scope.selectName = (force) ->
-    if force || !$scope.osmdata.name-results
-      CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
-        $scope.osmdata.name-results = res
-
-  $scope.selectAddress = (force) ->
-    if force || !$scope.osmdata.address-results
-      CoMapData.geocode $scope.osmdata.address, {city, county: $scope.data.town} .success (res) ->
-        $scope.osmdata.address-results = res
-
-  $scope.setStreet = (entry) ->
-    $scope.data <<< do
-      osm_street_id: "#{entry.osm_type}/#{entry.osm_id}"
-    <- $scope.show-osm $scope.data.osm_street_id
-    $scope.dirty = true
+  $scope.search = ->
+    $scope.osmdata.search-results = [];
+    CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
+      $scope.osmdata.search-results ++= res
+    CoMapData.geocode $scope.osmdata.address, {city, county: $scope.data.town} .success (res) ->
+      $scope.osmdata.search-results ++= res
 
   $scope.save = ->
     $scope.data.osm_data = $scope.osmdata

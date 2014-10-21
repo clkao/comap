@@ -12,20 +12,17 @@ div(layout-fill, flex)
       label Place Name
       section(layout="horizontal")
         material-input(type="text", ng-model="osmdata.place_name")
-        material-button(ng-click="selectName(1)") Query by Name
-        i.circular.teal.checkmark.icon(ng-show="data.osm_id")
 
       label Address
       section(layout="horizontal")
         material-input(type="text", ng-model="osmdata.address")
-        material-button(ng-click="selectAddress(1)") Query by Address
-        i.circular.teal.checkmark.icon(ng-show="data.osm_street_id")
 
       label Remark
       material-input(type="text", ng-model="osmdata.place_remark")
 
     div(style="margin-top: 30px; padding-top: 10px; border-top: 1px solid #ccc;")
       material-button.material-theme-blue(ng-click='save()') Save
+      material-button(ng-click='search(1)') Search
 
     div(ng-if="osmdata")
       p {{ osmdata.addressResults[0].lat }}
@@ -33,26 +30,14 @@ div(layout-fill, flex)
       p {{ osmdata.addressResults[0].display_name }}
 
     material-content.material-content-padding
-      div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
-      material-list(ng-if="osmdata.nameResults")
-        material-item(ng-repeat="entry in osmdata.nameResults")
+      div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
+      material-listing
+        material-item(ng-repeat="entry in osmdata.searchResults")
           material-item-content
             i.circular.icon.zoom.in(ng-click="look(entry)")
             i.circular.icon.edit(ng-click="edit(entry)")
-            i.circular.icon.checkmark(ng-click="setPlace(entry)",ng-class="{teal: data.osm_id == entry.osm_type + '/' + entry.osm_id}")
-            {{entry.display_name}}
-          material-divider(ng-if="!$last")
-
-    material-content.material-content-padding
-        div(ng-if="osmdata.addressResults && osmdata.addressResults.length == 0")
-          | No results
-        material-list(ng-if="osmdata.addressResults")
-          material-item(ng-repeat="entry in osmdata.addressResults")
-            material-item-content
-              i.circular.icon.zoom.in(ng-click="look(entry)")
-              i.circular.icon.edit(ng-click="edit(entry)")
-              i.circular.icon.checkmark(ng-click="setStreet(entry)",ng-class="{teal: data.osm_street_id == entry.osm_type + '/' + entry.osm_id}")
-              div {{entry.display_name}}
+            i.circular.icon.checkmark(ng-click="match(entry)",ng-class="{ teal: data.osm_id == entry.osm_id }")
+            span [{{entry.osm_id}}] {{entry.display_name}}
           material-divider(ng-if="!$last")
 
 leaflet.material-whiteframe-z3(defaults="defaults", center="center", width="800px", height="100%")
