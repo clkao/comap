@@ -1,33 +1,29 @@
 div(layout-fill, flex)
   material-toolbar.material-theme-dark
-    .material-toolbar-tools {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
+    .material-toolbar-tools
+      {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
+      span(flex)
       material-button.material-theme-light-blue(ng-click='random()',layout-align='end') Next
 
-  div(style="margin: 16px;")
-    h3 {{ data.id }}
+  material-toolbar
+    .material-toolbar-tools
+      span {{ data.id }}
+      span(flex)
+      material-button(ng-click='search(1)') Search
+      material-button.material-theme-blue(ng-click='save()') Save
 
+  div(style="margin: 20px;")
     p(ng-if="data.phone") phone {{data.phone}}
 
     material-input-group
       label Place Name
-      section(layout="horizontal")
-        material-input(type="text", ng-model="osmdata.place_name")
+      material-input(layout-fill, type="text", ng-model="osmdata.place_name")
 
       label Address
-      section(layout="horizontal")
-        material-input(type="text", ng-model="osmdata.address")
+      material-input(layout-fill, type="text", ng-model="osmdata.address")
 
       label Remark
-      material-input(type="text", ng-model="osmdata.place_remark")
-
-    div(style="margin-top: 30px; padding-top: 10px; border-top: 1px solid #ccc;")
-      material-button.material-theme-blue(ng-click='save()') Save
-      material-button(ng-click='search(1)') Search
-
-    div(ng-if="osmdata")
-      p {{ osmdata.addressResults[0].lat }}
-      p {{ osmdata.addressResults[0].lon }}
-      p {{ osmdata.addressResults[0].display_name }}
+      material-input(layout-fill, type="text", ng-model="osmdata.place_remark")
 
     material-content.material-content-padding
       div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
