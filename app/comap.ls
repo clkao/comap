@@ -43,7 +43,7 @@ angular.module "comap" <[config]>
 
   set: (key, data) ->
     $http.put "#API_ENDPOINT/collections/booth/#key", data
-  geocode: (query, {city, country = "TW", county}) ->
+  geocode: ({q, house_number, street, city, country = "TW", county}) ->
     # crazy osm special case before the admin region actually changes
     if city is '桃園市'
       city = '桃園縣 (Táoyuán)'
@@ -51,7 +51,8 @@ angular.module "comap" <[config]>
       params: {county, city, country} <<< do
         format: 'json'
         addressdetails: 1
-        street: query
+        street: "#house_number #street"
+        q: q
 
 .controller CoMapCtrl: <[$q $scope $sce $state leafletData CoMapData]> ++ ($q, $scope, $sce, $state, leafletData, CoMapData) ->
   var city
@@ -89,9 +90,9 @@ angular.module "comap" <[config]>
 
   $scope.search = ->
     $scope.osmdata.search-results = [];
-    CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
+    CoMapData.geocode {city, county: $scope.data.town, q: $scope.osmdata.place_name} .success (res) ->
       $scope.osmdata.search-results ++= res
-    CoMapData.geocode $scope.osmdata.address, {city, county: $scope.data.town} .success (res) ->
+    CoMapData.geocode {city, county: $scope.data.town, house_number: $scope.osmdata.house_number, street: $scope.osmdata.address} .success (res) ->
       $scope.osmdata.search-results ++= res
 
   $scope.save = ->

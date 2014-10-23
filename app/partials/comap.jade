@@ -19,11 +19,14 @@ div(layout-fill, flex)
       label Place Name
       material-input(layout-fill, type="text", ng-model="osmdata.place_name")
 
-      label Address
-      material-input(layout-fill, type="text", ng-model="osmdata.address")
-
       label Remark
       material-input(layout-fill, type="text", ng-model="osmdata.place_remark")
+
+      label Street
+      material-input(layout-fill, type="text", ng-model="osmdata.address")
+
+      label Number
+      material-input(layout-fill, type="text", ng-model="osmdata.house_number")
 
     material-content.material-content-padding
       div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
