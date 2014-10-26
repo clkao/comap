@@ -1,4 +1,4 @@
-div(layout-fill, flex)
+material-content(layou="vertical", layout-fill, flex)
   material-toolbar.material-theme-dark
     .material-toolbar-tools
       {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
@@ -12,23 +12,22 @@ div(layout-fill, flex)
       material-button(ng-click='search(1)') Search
       material-button.material-theme-blue(ng-click='save()') Save
 
-  div(style="margin: 20px;")
+  material-content.material-content-padding(flex, style="display: block;")
     p(ng-if="data.phone") phone {{data.phone}}
 
     material-input-group
       label Place Name
-      material-input(layout-fill, type="text", ng-model="osmdata.place_name")
+      material-input(type="text", style="width: 100%;", ng-model="osmdata.place_name")
 
       label Remark
-      material-input(layout-fill, type="text", ng-model="osmdata.place_remark")
+      material-input(type="text", style="width: 100%;", ng-model="osmdata.place_remark")
 
       label Street
-      material-input(layout-fill, type="text", ng-model="osmdata.address")
+      material-input(type="text", style="width: 100%;", ng-model="osmdata.address")
 
       label Number
-      material-input(layout-fill, type="text", ng-model="osmdata.house_number")
+      material-input(type="text", style="width: 100%;", ng-model="osmdata.house_number")
 
-    material-content.material-content-padding
       div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
       material-listing
         material-item(ng-repeat="entry in osmdata.searchResults")
@@ -37,6 +36,5 @@ div(layout-fill, flex)
             i.circular.icon.edit(ng-click="edit(entry)")
             i.circular.icon.checkmark(ng-click="match(entry)",ng-class="{ teal: data.osm_id == entry.osm_id }")
             span [{{entry.osm_id}}] {{entry.display_name}}
-          material-divider(ng-if="!$last")
 
 leaflet.material-whiteframe-z3(defaults="defaults", center="center", width="800px", height="100%")
