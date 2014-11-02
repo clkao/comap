@@ -136,7 +136,12 @@ angular.module "comap" <[config]>
     $scope.id = "#{$state.params.county}-#{$state.params.seq}"
     $scope.data <- CoMapData.get $scope.id .success
     $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
-    if $scope.data.osm_id
-      $scope.show-osm that
+
+    $scope.osmdata.search-results = $scope.osmdata.search-results.filter (entry) ->
+      if entry.osm_id == $scope.data.osm_id
+        $scope.look entry
+        true
+      else
+        false
 
 .filter "countyName" -> (county) -> tw3166[county]
