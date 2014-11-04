@@ -130,18 +130,21 @@ angular.module "comap" <[config]>
   $scope.look = (entry) ->
     $scope.show-osm entry<[osm_type osm_id]>.join '/'
 
+  $scope.search-results-filter = (entry) ->
+    if $scope.data.osm_id
+      if $scope.data.osm_id == entry.osm_id
+        $scope.look entry
+        true
+      else
+        false
+    else
+      true
+
   $scope.$watch '$state.params.seq' -> unless it is undefined
     unless it
       return count.promise.then -> $scope.random!
     $scope.id = "#{$state.params.county}-#{$state.params.seq}"
     $scope.data <- CoMapData.get $scope.id .success
     $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
-
-    $scope.osmdata.search-results = $scope.osmdata.search-results.filter (entry) ->
-      if entry.osm_id == $scope.data.osm_id
-        $scope.look entry
-        true
-      else
-        false
 
 .filter "countyName" -> (county) -> tw3166[county]

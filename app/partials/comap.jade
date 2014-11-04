@@ -30,7 +30,7 @@ material-content(layou="vertical", layout-fill, flex)
 
       div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
       material-listing
-        material-item(ng-repeat="entry in osmdata.searchResults")
+        material-item(ng-repeat="entry in osmdata.searchResults | filter: searchResultsFilter")
           material-item-content
             i.circular.icon.zoom.in(ng-click="look(entry)")
             i.circular.icon.edit(ng-click="edit(entry)")
