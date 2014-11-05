@@ -33,7 +33,6 @@ material-content(layou="vertical", layout-fill, flex)
         material-item(ng-repeat="entry in osmdata.searchResults | filter: searchResultsFilter")
           material-item-content
             i.circular.icon.zoom.in(ng-click="look(entry)")
-            i.circular.icon.edit(ng-click="edit(entry)")
             i.circular.icon.checkmark(ng-click="match(entry)",ng-class="{ teal: data.osm_id == entry.osm_id }")
             span [{{entry.osm_id}}] {{entry.display_name}}
 

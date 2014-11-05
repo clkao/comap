@@ -78,10 +78,6 @@ angular.module "comap" <[config]>
       zoom: 13
   map <- leafletData.getMap!then
 
-  $scope.edit = (entry) ->
-    edit_url = "https://www.openstreetmap.org/edit?#{entry.osm_type}=#{entry.osm_id}"
-    window.open edit_url, '_blank'
-
   $scope.match = (entry) ->
     $scope.data <<< do
       osm_id: entry.osm_id
