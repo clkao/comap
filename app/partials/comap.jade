@@ -15,19 +15,12 @@ md-content(layou="vertical", layout-fill, flex)
   md-content.md-content-padding(flex, style="display: block;")
     p(ng-if="data.phone") phone {{data.phone}}
 
-    md-input-group
-      label Place Name
-      md-input(type="text", style="width: 100%;", ng-model="osmdata.place_name")
+    md-text-float(label="Place Name", ng-model="osmdata.place_name")
+    md-text-float(label="Remark",     ng-model="osmdata.place_remark")
+    md-text-float(label="Street",     ng-model="osmdata.address")
+    md-text-float(label="Number",     ng-model="osmdata.house_number")
 
-      label Remark
-      md-input(type="text", style="width: 100%;", ng-model="osmdata.place_remark")
-
-      label Street
-      md-input(type="text", style="width: 100%;", ng-model="osmdata.address")
-
-      label Number
-      md-input(type="text", style="width: 100%;", ng-model="osmdata.house_number")
-
+    md-content
       div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
       md-listing
         md-item(ng-repeat="entry in osmdata.searchResults | filter: searchResultsFilter")
