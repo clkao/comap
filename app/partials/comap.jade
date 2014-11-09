@@ -1,39 +1,39 @@
-material-content(layou="vertical", layout-fill, flex)
-  material-toolbar.material-theme-dark
-    .material-toolbar-tools
+md-content(layou="vertical", layout-fill, flex)
+  md-toolbar.md-theme-dark
+    .md-toolbar-tools
       {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
       span(flex)
-      material-button.material-theme-light-blue(ng-click='random()',layout-align='end') Next
+      md-button.md-theme-light-blue(ng-click='random()',layout-align='end') Next
 
-  material-toolbar
-    .material-toolbar-tools
+  md-toolbar
+    .md-toolbar-tools
       span {{ data.id }}
       span(flex)
-      material-button(ng-click='search(1)') Search
-      material-button.material-theme-blue(ng-click='save()') Save
+      md-button(ng-click='search(1)') Search
+      md-button.md-theme-blue(ng-click='save()') Save
 
-  material-content.material-content-padding(flex, style="display: block;")
+  md-content.md-content-padding(flex, style="display: block;")
     p(ng-if="data.phone") phone {{data.phone}}
 
-    material-input-group
+    md-input-group
       label Place Name
-      material-input(type="text", style="width: 100%;", ng-model="osmdata.place_name")
+      md-input(type="text", style="width: 100%;", ng-model="osmdata.place_name")
 
       label Remark
-      material-input(type="text", style="width: 100%;", ng-model="osmdata.place_remark")
+      md-input(type="text", style="width: 100%;", ng-model="osmdata.place_remark")
 
       label Street
-      material-input(type="text", style="width: 100%;", ng-model="osmdata.address")
+      md-input(type="text", style="width: 100%;", ng-model="osmdata.address")
 
       label Number
-      material-input(type="text", style="width: 100%;", ng-model="osmdata.house_number")
+      md-input(type="text", style="width: 100%;", ng-model="osmdata.house_number")
 
       div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
-      material-listing
-        material-item(ng-repeat="entry in osmdata.searchResults | filter: searchResultsFilter")
-          material-item-content
+      md-listing
+        md-item(ng-repeat="entry in osmdata.searchResults | filter: searchResultsFilter")
+          md-item-content
             i.circular.icon.zoom.in(ng-click="look(entry)")
             i.circular.icon.checkmark(ng-click="match(entry)",ng-class="{ teal: data.osm_id == entry.osm_id }")
             span [{{entry.osm_id}}] {{entry.display_name}}
 
-leaflet.material-whiteframe-z3(defaults="defaults", center="center", width="40%", height="100%")
+leaflet.md-whiteframe-z3(defaults="defaults", center="center", width="40%", height="100%")

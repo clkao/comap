@@ -27,17 +27,17 @@ html(ng-app='App')
 
   body(ng-controller='AppCtrl', ng-cloak, layout="horizontal", layout-fill)
     a.ui.top.right.attached.label.build-id(href="http://github.com/clkao/comap", style="z-index: 1000;") {{ config_build }}
-    material-sidenav.material-sidenav-left.material-whiteframe-z3.closed(layout="vertical")
-      material-toolbar.material-theme-light
-        h2.material-toolbar-tools
+    md-sidenav.md-sidenav-left.md-whiteframe-z3.closed(layout="vertical")
+      md-toolbar.md-theme-light
+        h2.md-toolbar-tools
           a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
-      material-content(flex)
-        material-item(ng-repeat="city in cities")
+      md-content(flex)
+        md-item(ng-repeat="city in cities")
           div(style="width: 100%")
             .ui.top.attached.progress.successful(ng-style="{width: (100*city.completed / city.total)+'%'}"): .bar
-            material-button.material-tile-content(layout-fill, ui-sref="{county: city.county, seq: null}") {{ city.county | countyName }} ({{city.total}}) {{ 100 * city.completed / city.total | number:2 }}%
-      material-toolbar.material-theme-light
-        h2.material-toolbar-tools
+            md-button.md-tile-content(layout-fill, ui-sref="{county: city.county, seq: null}") {{ city.county | countyName }} ({{city.total}}) {{ 100 * city.completed / city.total | number:2 }}%
+      md-toolbar.md-theme-light
+        h2.md-toolbar-tools
           a.item.about(ui-sref="about") 關於
     div(layout="horizontal", ui-view, layout-fill)
 
