@@ -26,6 +26,14 @@ angular.module "comap" <[config]>
 .factory CoMapData: <[$http API_ENDPOINT]> ++ ($http, API_ENDPOINT) ->
   get: (key) ->
     $http.get "#API_ENDPOINT/collections/booth/#key"
+  set: (key, data) ->
+    $http.put "#API_ENDPOINT/collections/booth/#key", data
+  list: (county, limit = 30, offset = 0) ->
+    $http.get "#API_ENDPOINT/collections/booth" do
+      params:
+        q: JSON.stringify {county}
+        l: limit
+        sk: offset
   random: (county, count) ->
     $http.get "#API_ENDPOINT/collections/booth" do
       params:
@@ -40,9 +48,6 @@ angular.module "comap" <[config]>
         c: 1
   completion: ->
     $http.get "#API_ENDPOINT/collections/completion"
-
-  set: (key, data) ->
-    $http.put "#API_ENDPOINT/collections/booth/#key", data
   geocode: ({q, house_number, street, city, country = "TW", county}) ->
     # crazy osm special case before the admin region actually changes
     if city is '桃園市'
@@ -62,6 +67,7 @@ angular.module "comap" <[config]>
       res <- CoMapData.count it .success
       $scope.count = res.count
       $scope.random!
+      $scope.next-list!
     else
       $state.params.county = "TPE"
 
@@ -95,6 +101,16 @@ angular.module "comap" <[config]>
     data <- CoMapData.random $scope.county, $scope.count .success
     [_, seq] = data.entries.0.id.split '-'
     $state.transition-to 'comap.county.booth' {county: $state.params.county, seq}
+
+  $scope.offset = 0
+
+  $scope.prev-list = ->
+    CoMapData.list($scope.county, 10, $scope.offset -= 10) .success (res) ->
+      $scope.booths = res.entries
+
+  $scope.next-list = ->
+    CoMapData.list($scope.county, 10, $scope.offset += 10) .success (res) ->
+      $scope.booths = res.entries
 
   #L.mapbox.accessToken = 'pk.eyJ1IjoiY2xrYW8iLCJhIjoiOW5MUkJEOCJ9.xOaCu48ToZJa7h2sxcH_SA';
   #mapboxTiles = L.tileLayer 'https://{s}.tiles.mapbox.com/v3/clkao.j69d46c1/{z}/{x}/{y}.png', do

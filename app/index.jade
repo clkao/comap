@@ -33,7 +33,7 @@ html(ng-app='App')
           a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
       md-content(flex)
         md-item(ng-repeat="city in cities")
-          div(style="width: 100%")
+          div
             .ui.top.attached.progress.successful(ng-style="{width: (100*city.completed / city.total)+'%'}"): .bar
             md-button.md-tile-content(layout-fill, ui-sref="{county: city.county, seq: null}") {{ city.county | countyName }} ({{city.total}}) {{ 100 * city.completed / city.total | number:2 }}%
       md-toolbar.md-theme-light

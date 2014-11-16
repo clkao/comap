@@ -1,7 +1,18 @@
+md-sidenav.md-whiteframe-z3(layout="vertical")
+  md-toolbar.md-theme-light
+    .md-toolbar-tools
+      {{ county | countyName }}
+      span(flex)
+      md-button.md-theme-light-blue(ng-click='prevList()') «
+      md-button.md-theme-light-blue(ng-click='nextList()') »
+  md-content(flex)
+    md-item(ng-repeat="booth in booths")
+      md-button.md-tile-content(layout-fill, ui-sref="{ county: booth.county, seq: booth.seq }") {{ booth.id }} {{ booth.town }} {{ booth.village }}
+
 md-content(layou="vertical", layout-fill, flex)
   md-toolbar.md-theme-dark
     .md-toolbar-tools
-      {{ county | countyName }}/{{ data.town }}/{{ data.village }}
+      {{ data.town }}/{{ data.village }}
       span(flex)
       md-button.md-theme-light-blue(ng-click='random()',layout-align='end') Next
 
