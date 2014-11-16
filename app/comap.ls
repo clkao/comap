@@ -56,8 +56,6 @@ angular.module "comap" <[config]>
 
 .controller CoMapCtrl: <[$q $scope $sce $state leafletData CoMapData]> ++ ($q, $scope, $sce, $state, leafletData, CoMapData) ->
   var city
-  CoMapData.completion JSON.stringify {lat: null} .success ({entries}?) ->
-    $scope.completion = entries
 
   count = $q.defer!
   $scope.$watch '$state.params.county' -> if it
