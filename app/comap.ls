@@ -55,19 +55,15 @@ angular.module "comap" <[config]>
         q: q
 
 .controller CoMapCtrl: <[$q $scope $sce $state leafletData CoMapData]> ++ ($q, $scope, $sce, $state, leafletData, CoMapData) ->
-  var city
-
   count = $q.defer!
-  $scope.$watch '$state.params.county' -> if it
-    $scope.county = it
-    $scope.county-name = city := tw3166[it]
-    res <- CoMapData.count it, {lat: null} .success
-    $scope.count = res.count
-    res <- CoMapData.count it .success
-    $scope.total = res.count
-    count.resolve!
-    if $state.current.name is 'comap.county'
+  $scope.$watch '$state.params.county' ->
+    if it
+      $scope.county = it
+      res <- CoMapData.count it .success
+      $scope.count = res.count
       $scope.random!
+    else
+      $state.params.county = "TPE"
 
   $scope <<< do
     center: do
@@ -84,9 +80,9 @@ angular.module "comap" <[config]>
 
   $scope.search = ->
     $scope.osmdata.search-results = [];
-    CoMapData.geocode {city, county: $scope.data.town, q: $scope.osmdata.place_name} .success (res) ->
+    CoMapData.geocode {city: tw3166[$scope.county], county: $scope.data.town, q: $scope.osmdata.place_name} .success (res) ->
       $scope.osmdata.search-results ++= res
-    CoMapData.geocode {city, county: $scope.data.town, house_number: $scope.osmdata.house_number, street: $scope.osmdata.address} .success (res) ->
+    CoMapData.geocode {city: tw3166[$scope.county], county: $scope.data.town, house_number: $scope.osmdata.house_number, street: $scope.osmdata.address} .success (res) ->
       $scope.osmdata.search-results ++= res
 
   $scope.save = ->

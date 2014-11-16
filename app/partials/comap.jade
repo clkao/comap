@@ -1,7 +1,7 @@
 md-content(layou="vertical", layout-fill, flex)
   md-toolbar.md-theme-dark
     .md-toolbar-tools
-      {{ countyName }}/{{data.town}}/{{ data.village }} 投開票所
+      {{ county | countyName }}/{{ data.town }}/{{ data.village }}
       span(flex)
       md-button.md-theme-light-blue(ng-click='random()',layout-align='end') Next
 
