@@ -30,19 +30,16 @@ angular.module "App" <[app.templates ngMaterial ui.router comap leaflet-directiv
   $rootScope.$on '$stateChangeSuccess' (e, {name}) ->
     window?ga? 'send' 'pageview' page: $location.$$path, title: name
 
-.controller AppCtrl: <[$scope $location $rootScope $sce]> ++ (s, $location, $rootScope, $sce) ->
-  s <<< {$location}
-  s.$watch '$location.path()' (activeNavId or '/') ->
-    s <<< {activeNavId}
+.controller AppCtrl: <[$scope $location $rootScope $sce CoMapData]> ++ ($scope, $location, $rootScope, $sce, CoMapData) ->
+  $scope <<< {$location}
+  $scope.$watch '$location.path()' (activeNavId or '/') ->
+    $scope <<< {activeNavId}
 
-  s.getClass = (id) ->
-    if s.activeNavId.substring 0 id.length is id
+  $scope.getClass = (id) ->
+    if $scope.activeNavId.substring 0 id.length is id
       'active'
     else
       ''
 
-.controller About: <[$rootScope $http]> ++ ($rootScope, $http) ->
-    $rootScope.activeTab = 'about'
-
-angular.module "config" []
-.constant 'API_ENDPOINT' 'http://api-beta.ly.g0v.tw:3908'
+  CoMapData.completion JSON.stringify { lat: null } .success ({entries}?) ->
+    $scope.cities = entries

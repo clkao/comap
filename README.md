@@ -14,6 +14,10 @@ Start server:
 
     $ npm run dev   # then open http://localhost:3333/
 
+# Open Street Map Search API
+
+    http://wiki.openstreetmap.org/wiki/Nominatim
+
 # License
 
 The MIT license: http://clkao.mit-license.org/

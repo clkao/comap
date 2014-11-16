@@ -1,78 +1,43 @@
-section(layout='horizontal', layout-fill='layout-fill')
-    material-sidenav.material-sidenav-left.material-whiteframe-z2(component-id='left')
-      material-content.material-content-padding(ng-controller='LeftCtrl')
-        material-button.material-button-colored(ng-click='close()', hide-md='hide-md')
-          | Close
-        material-list
-          material-item(ng-repeat="c in completion")
-            div(style="width: 100%")
-              .ui.top.attached.progress.successful(ng-style="{width: (100*c.completed / c.total)+'%'}"): .bar
-              material-button.material-tile-content(layout-fill,ui-sref="{county: c.county, seq: null}",title="{{100 * c.completed / c.total | number:2}}%") {{c.county | countyName}} ({{c.total}})
+md-sidenav.md-whiteframe-z3(layout="vertical")
+  md-toolbar.md-theme-light
+    .md-toolbar-tools
+      {{ county | countyName }}
+      span(flex)
+      md-button.md-theme-light-blue(ng-click='prevList()') «
+      md-button.md-theme-light-blue(ng-click='nextList()') »
+  md-content(flex)
+    md-item(ng-repeat="booth in booths")
+      md-button.md-tile-content(layout-fill, ui-sref="{ county: booth.county, seq: booth.seq }") {{ booth.id }} {{ booth.town }} {{ booth.village }}
 
-    material-content(layout-fill)
-      div(layout='vertical', layout-fill='layout-fill', layout-align='center center')
-        material-toolbar.material-theme-green(scroll-shrink)
-         .material-toolbar-tools
-            material-button.material-theme-light-blue.material-button-raised(ng-click='toggleLeft()', hide-md='hide-md')
-              i.list.icon
-            h1 {{ countyName }} ({{ (total - count) / total * 100 | number:2}}%) / {{data.town}}{{ data.village }} / {{ id }} 投開票所
-            material-button.material-button-raised.material-button-colored.material-theme-red(ng-click='save()',ng-show="dirty") Save
-            material-button.material-button-raised.material-button-colored.material-theme-orange(ng-click='random()',layout-align='end') Random
-        div(layout='horizontal', layout-fill='layout-fill',flex, layout-align='center')
-          material-content.material-content-padding.comap-input(layout='vertical', flex)
-            material-card(layout-fill,flex)
-              h3 {{ data.place_name }}
-              material-input-group
-                label(for="place_name") Place Name
-                section(layout="horizontal")
-                  material-input(id="place_name",type="text",ng-model="osmdata.place_name")
-                  i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_id")
-                  i.circular.red.inverted.question.icon(ng-hide="data.osm_id",ng-click='selectName()')
-              material-whiteframe.material-whiteframe-z2.fixed(layout="vertical",layout-align="left center",ng-show="selectingName")
-                material-content.material-content-padding
-                  div(layout='horizontal',layout-align='end')
-                    material-button(ng-click="selectName(1)") Query Again
-                    material-button(ng-click="selectingName = false") close
-                  div(ng-if="osmdata.nameResults && osmdata.nameResults.length == 0") No results
-                  material-list(ng-if="osmdata.nameResults")
-                    material-item(ng-repeat="entry in osmdata.nameResults")
-                      .material-tile-left
-                        i.circular.icon: img(ng-src="{{entry.icon}}")
-                      .material-tile-content
-                        i.circular.icon.zoom.in(ng-click="look(entry)")
-                        i.circular.icon.edit(ng-click="edit(entry)")
-                        i.circular.icon.checkmark(ng-click="setPlace(entry)",ng-class="{teal: data.osm_id == entry.osm_type + '/' + entry.osm_id}")
-                        h2 {{entry.display_name}}
-              material-input-group
-                label(for="place_remark") Remark
-                material-input(id="place_remark",type="text",ng-model="osmdata.place_remark",size="6")
-            material-card(layout-fill,flex)
-              h3 {{ data.address }}
-              material-input-group
-                label(for="address") Address
-                section(layout="horizontal")
-                  material-input(id="test",type="text",ng-model="osmdata.address")
-                  i.circular.teal.inverted.checkmark.icon(ng-show="data.osm_street_id")
-                  i.circular.red.inverted.question.icon(ng-hide="data.osm_street_id",ng-click='selectAddress()')
-              material-input-group
-                label(for="house_number") Number
-                section(layout="horizontal")
-                  material-input(id="test",type="text",ng-model="osmdata.house_number",size="6")
-                  //i.circular.teal.checkmark.icon(ng-show="data.osm_street_id")
-              material-whiteframe.material-whiteframe-z2.fixed(layout="vertical",layout-align="left center",ng-show="selectingAddress")
-                material-content.material-content-padding
-                  div(ng-if="osmdata.addressResults && osmdata.addressResults.length == 0")
-                    | No results
-                  material-list(ng-if="osmdata.addressResults")
-                    material-item(ng-repeat="entry in osmdata.addressResults")
-                      .material-tile-content
-                        i.circular.icon.zoom.in(ng-click="look(entry)")
-                        i.circular.icon.edit(ng-click="edit(entry)")
-                        i.circular.icon.checkmark(ng-click="setStreet(entry)",ng-class="{teal: data.osm_street_id == entry.osm_type + '/' + entry.osm_id}")
-                        h2 {{entry.display_name}}
-                  div(layout='horizontal',layout-align='end')
-                    material-button(ng-click="selectAddress(1)") Query Again
-                    material-button(ng-click="selectingAddress = false") close
-          div(flex)
-            h4 By submitting, you agree the data will be released under CC0 or ODbl when stored on OSM.
-            leaflet(defaults="defaults",center="center",height="320px",width="100%",layout-fill)
+md-content(layou="vertical", layout-fill, flex)
+  md-toolbar.md-theme-dark
+    .md-toolbar-tools
+      {{ data.town }}/{{ data.village }}
+      span(flex)
+      md-button.md-theme-light-blue(ng-click='random()',layout-align='end') Next
+
+  md-toolbar
+    .md-toolbar-tools
+      span {{ data.id }}
+      span(flex)
+      md-button(ng-click='search(1)') Search
+      md-button.md-theme-blue(ng-click='save()') Save
+
+  md-content.md-content-padding(flex, style="display: block;")
+    p(ng-if="data.phone") phone {{data.phone}}
+
+    md-text-float(label="Place Name", ng-model="osmdata.place_name")
+    md-text-float(label="Remark",     ng-model="osmdata.place_remark")
+    md-text-float(label="Street",     ng-model="osmdata.address")
+    md-text-float(label="Number",     ng-model="osmdata.house_number")
+
+    md-content
+      div(ng-if="osmdata.searchResults && osmdata.searchResults.length == 0") No Search Results
+      md-listing
+        md-item(ng-repeat="entry in osmdata.searchResults | filter: searchResultsFilter")
+          md-item-content
+            i.circular.icon.zoom.in(ng-click="look(entry)")
+            i.circular.icon.checkmark(ng-click="match(entry)",ng-class="{ teal: data.osm_id == entry.osm_id }")
+            span [{{entry.osm_id}}] {{entry.display_name}}
+
+leaflet.md-whiteframe-z3(defaults="defaults", center="center", width="40%", height="100%")

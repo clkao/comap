@@ -12,7 +12,7 @@ dependencies:
   angular: angular-version
   "angular-mocks": angular-version
   "angular-scenario": angular-version
-  "angular-material": "0.0.2-master-1f0688b"
+  "angular-material": "0.4.2"
   "angular-ui-router": "0.2.11"
   "angular-leaflet-directive": "~0.7.8"
 

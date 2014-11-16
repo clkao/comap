@@ -26,6 +26,14 @@ angular.module "comap" <[config]>
 .factory CoMapData: <[$http API_ENDPOINT]> ++ ($http, API_ENDPOINT) ->
   get: (key) ->
     $http.get "#API_ENDPOINT/collections/booth/#key"
+  set: (key, data) ->
+    $http.put "#API_ENDPOINT/collections/booth/#key", data
+  list: (county, limit = 30, offset = 0) ->
+    $http.get "#API_ENDPOINT/collections/booth" do
+      params:
+        q: JSON.stringify {county}
+        l: limit
+        sk: offset
   random: (county, count) ->
     $http.get "#API_ENDPOINT/collections/booth" do
       params:
@@ -40,10 +48,7 @@ angular.module "comap" <[config]>
         c: 1
   completion: ->
     $http.get "#API_ENDPOINT/collections/completion"
-
-  set: (key, data) ->
-    $http.put "#API_ENDPOINT/collections/booth/#key", data
-  geocode: (query, {city, country = "TW", county}) ->
+  geocode: ({q, house_number, street, city, country = "TW", county}) ->
     # crazy osm special case before the admin region actually changes
     if city is '桃園市'
       city = '桃園縣 (Táoyuán)'
@@ -51,64 +56,40 @@ angular.module "comap" <[config]>
       params: {county, city, country} <<< do
         format: 'json'
         addressdetails: 1
-        street: query
+        street: "#house_number #street"
+        q: q
 
-.controller CoMapCtrl: <[$q $scope $sce $materialSidenav $state leafletData CoMapData]> ++ ($q, $scope, $sce, $materialSidenav, $state, leafletData, CoMapData) ->
-  var city
-  CoMapData.completion JSON.stringify {lat: null} .success ({entries}?) ->
-    $scope.completion = entries
-
+.controller CoMapCtrl: <[$q $scope $sce $state leafletData CoMapData]> ++ ($q, $scope, $sce, $state, leafletData, CoMapData) ->
   count = $q.defer!
-  $scope.$watch '$state.params.county' -> if it
-    $scope.county = it
-    $scope.county-name = city := tw3166[it]
-    res <- CoMapData.count it, {lat: null} .success
-    $scope.count = res.count
-    res <- CoMapData.count it .success
-    $scope.total = res.count
-    count.resolve!
-    if $state.current.name is 'comap.county'
+  $scope.$watch '$state.params.county' ->
+    if it
+      $scope.county = it
+      res <- CoMapData.count it .success
+      $scope.count = res.count
       $scope.random!
-
-  $scope.toggleLeft = ->
-    $materialSidenav('left').toggle()
+      $scope.next-list!
+    else
+      $state.params.county = "TPE"
 
   $scope <<< do
     center: do
-      lat: 24.5
-      lng: 121.5
-      zoom: 8
+      lat: 25.04
+      lng: 121.54
+      zoom: 13
   map <- leafletData.getMap!then
 
-  $scope.edit = (entry) ->
-    edit_url = "https://www.openstreetmap.org/edit?#{entry.osm_type}=#{entry.osm_id}"
-    window.open edit_url, '_blank'
-  $scope.setPlace = (entry) ->
-    $scope.data <<< entry{place_id} <<< do
-      osm_id: "#{entry.osm_type}/#{entry.osm_id}"
+  $scope.match = (entry) ->
+    $scope.data <<< do
+      osm_id: entry.osm_id
       lat: entry.lat
       lng: entry.lon
-      osm_name: $('tag[k="name"]', $scope.xml).attr("v")
-    <- $scope.show-osm $scope.data.osm_id
-    $scope.dirty = true
-    $scope.selectingName = false
 
-  $scope.selectName = (force) ->
-    if force || !$scope.osmdata.name-results
-      CoMapData.geocode $scope.osmdata.place_name, {city} .success (res) ->
-        $scope.osmdata.name-results = res
-    $scope.selectingName = true
-  $scope.selectAddress = (force) ->
-    if force || !$scope.osmdata.address-results
-      CoMapData.geocode $scope.osmdata.address, {city, county: $scope.data.town} .success (res) ->
-        $scope.osmdata.address-results = res
-    $scope.selectingAddress = true
-  $scope.setStreet = (entry) ->
-    $scope.data <<< do
-      osm_street_id: "#{entry.osm_type}/#{entry.osm_id}"
-    <- $scope.show-osm $scope.data.osm_street_id
-    $scope.dirty = true
-    $scope.selectingAddress = false
+  $scope.search = ->
+    $scope.osmdata.search-results = [];
+    CoMapData.geocode {city: tw3166[$scope.county], county: $scope.data.town, q: $scope.osmdata.place_name} .success (res) ->
+      $scope.osmdata.search-results ++= res
+    CoMapData.geocode {city: tw3166[$scope.county], county: $scope.data.town, house_number: $scope.osmdata.house_number, street: $scope.osmdata.address} .success (res) ->
+      $scope.osmdata.search-results ++= res
 
   $scope.save = ->
     $scope.data.osm_data = $scope.osmdata
@@ -118,9 +99,18 @@ angular.module "comap" <[config]>
 
   $scope.random = ->
     data <- CoMapData.random $scope.county, $scope.count .success
-    $scope.count = data.paging.count
     [_, seq] = data.entries.0.id.split '-'
     $state.transition-to 'comap.county.booth' {county: $state.params.county, seq}
+
+  $scope.offset = 0
+
+  $scope.prev-list = ->
+    CoMapData.list($scope.county, 10, $scope.offset -= 10) .success (res) ->
+      $scope.booths = res.entries
+
+  $scope.next-list = ->
+    CoMapData.list($scope.county, 10, $scope.offset += 10) .success (res) ->
+      $scope.booths = res.entries
 
   #L.mapbox.accessToken = 'pk.eyJ1IjoiY2xrYW8iLCJhIjoiOW5MUkJEOCJ9.xOaCu48ToZJa7h2sxcH_SA';
   #mapboxTiles = L.tileLayer 'https://{s}.tiles.mapbox.com/v3/clkao.j69d46c1/{z}/{x}/{y}.png', do
@@ -146,19 +136,21 @@ angular.module "comap" <[config]>
   $scope.look = (entry) ->
     $scope.show-osm entry<[osm_type osm_id]>.join '/'
 
+  $scope.search-results-filter = (entry) ->
+    if $scope.data.osm_id
+      if $scope.data.osm_id == entry.osm_id
+        $scope.look entry
+        true
+      else
+        false
+    else
+      true
+
   $scope.$watch '$state.params.seq' -> unless it is undefined
     unless it
       return count.promise.then -> $scope.random!
     $scope.id = "#{$state.params.county}-#{$state.params.seq}"
     $scope.data <- CoMapData.get $scope.id .success
     $scope.osmdata = if $scope.data.osm_data => that else {} <<< $scope.data{place_name, address}
-    if $scope.data.osm_id
-      $scope.show-osm that
 
-
-.controller LeftCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
-  $scope.close = -> $materialSidenav('left').close()
-
-.controller RightCtrl: <[$scope $timeout $materialSidenav]> ++ ($scope, $timeout, $materialSidenav) ->
-  $scope.close = -> $materialSidenav('right').close()
 .filter "countyName" -> (county) -> tw3166[county]

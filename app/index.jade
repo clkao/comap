@@ -24,10 +24,23 @@ html(ng-app='App')
     script(src='//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.16.1/javascript/semantic.min.js')
     script(src='/js/app.templates.js')
     script(src='/js/app.js')
-  body(ng-controller='AppCtrl',ng-cloak,layout="vertical",layout-fill)
-    include partials/nav.jade
-    material-content#container.container
-      div(ui-view)
+
+  body(ng-controller='AppCtrl', ng-cloak, layout="horizontal", layout-fill)
+    a.ui.top.right.attached.label.build-id(href="http://github.com/clkao/comap", style="z-index: 1000;") {{ config_build }}
+    md-sidenav.md-sidenav-left.md-whiteframe-z3.closed(layout="vertical")
+      md-toolbar.md-theme-light
+        h2.md-toolbar-tools
+          a.left.floated.item.header.brand(href='/') 投開票所鄉民 Geocode
+      md-content(flex)
+        md-item(ng-repeat="city in cities")
+          div
+            .ui.top.attached.progress.successful(ng-style="{width: (100*city.completed / city.total)+'%'}"): .bar
+            md-button.md-tile-content(layout-fill, ui-sref="{county: city.county, seq: null}") {{ city.county | countyName }} ({{city.total}}) {{ 100 * city.completed / city.total | number:2 }}%
+      md-toolbar.md-theme-light
+        h2.md-toolbar-tools
+          a.item.about(ui-sref="about") 關於
+    div(layout="horizontal", ui-view, layout-fill)
+
   - if (typeof(googleAnalytics) !== 'undefined')
     script(type="text/javascript").
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
